@@ -60,7 +60,7 @@ target_include_directories(lager INTERFACE
 target_link_libraries(lager INTERFACE zug Boost::boost)
 target_compile_features(lager INTERFACE cxx_std_17)
 
-install(TARGETS lager EXPORT LagerConfig)
+install(TARGETS lager EXPORT LagerTargets)
 
 # the library, with http debugger
 if (lager_BUILD_TESTS OR lager_BUILD_EXAMPLES)
@@ -87,7 +87,7 @@ if (lager_BUILD_TESTS OR lager_BUILD_EXAMPLES)
     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/resources/gui"
     COMMENT "Build debugger web UI")
 
-  install(TARGETS lager-debugger EXPORT LagerConfig)
+  install(TARGETS lager-debugger EXPORT LagerTargets)
 
   install(FILES
     resources/gui/gui.js
@@ -157,5 +157,5 @@ configure_package_config_file(
     INSTALL_DESTINATION "${config_install_dir}"
 )
 
-install(EXPORT LagerConfig DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Lager)
+install(EXPORT LagerTargets DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Lager)
 install(DIRECTORY lager DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
