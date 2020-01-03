@@ -133,7 +133,7 @@ configure_file(lager/config.hpp.in
 # * CMAKE_INSTALL_INCLUDEDIR
 include(GNUInstallDirs)
 
-set(config_install_dir "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}")
+set(config_install_dir "${CMAKE_INSTALL_LIBDIR}/cmake/Lager")
 set(generated_dir "${CMAKE_CURRENT_BINARY_DIR}/generated")
 set(version_config "${generated_dir}/LagerConfigVersion.cmake")
 set(project_config "${generated_dir}/LagerConfig.cmake")
@@ -157,5 +157,6 @@ configure_package_config_file(
     INSTALL_DESTINATION "${config_install_dir}"
 )
 
-install(EXPORT LagerTargets DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Lager)
+install(FILES "${project_config}" "${version_config}" DESTINATION "${config_install_dir}")
+install(EXPORT LagerTargets DESTINATION "${config_install_dir}")
 install(DIRECTORY lager DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
