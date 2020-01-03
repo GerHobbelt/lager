@@ -58,6 +58,7 @@ target_include_directories(lager INTERFACE
   $<BUILD_INTERFACE:${lager_SOURCE_DIR}/>
   $<INSTALL_INTERFACE:include>)
 target_link_libraries(lager INTERFACE zug Boost::boost)
+target_compile_features(lager INTERFACE cxx_std_17)
 
 install(TARGETS lager EXPORT LagerConfig)
 
@@ -126,5 +127,35 @@ endif()
 configure_file(lager/config.hpp.in
   "${CMAKE_SOURCE_DIR}/lager/config.hpp")
 
-install(EXPORT LagerConfig DESTINATION lib/cmake/Lager)
-install(DIRECTORY lager DESTINATION include)
+# Introduce variables:
+# * CMAKE_INSTALL_LIBDIR
+# * CMAKE_INSTALL_BINDIR
+# * CMAKE_INSTALL_INCLUDEDIR
+include(GNUInstallDirs)
+
+set(config_install_dir "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}")
+set(generated_dir "${CMAKE_CURRENT_BINARY_DIR}/generated")
+set(version_config "${generated_dir}/LagerConfigVersion.cmake")
+set(project_config "${generated_dir}/LagerConfig.cmake")
+set(TARGETS_EXPORT_NAME "LagerTargets")
+#set(namespace "${PROJECT_NAME}::")
+
+include(CMakePackageConfigHelpers)
+
+# Use:
+# * PROJECT_VERSION
+write_basic_package_version_file(
+    "${version_config}" COMPATIBILITY SameMajorVersion
+)
+
+# Use:
+# * TARGETS_EXPORT_NAME
+# * PROJECT_NAME
+configure_package_config_file(
+    "${CMAKE_SOURCE_DIR}/cmake/Config.cmake.in"
+    "${project_config}"
+    INSTALL_DESTINATION "${config_install_dir}"
+)
+
+install(EXPORT LagerConfig DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Lager)
+install(DIRECTORY lager DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
