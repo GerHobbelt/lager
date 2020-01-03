@@ -3,6 +3,12 @@ cmake_policy(SET CMP0048 NEW) # enable project VERSION
 cmake_policy(SET CMP0056 NEW) # honor link flags in try_compile()
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
+include("cmake/HunterGate.cmake")
+HunterGate(
+    URL "https://github.com/cpp-pm/hunter/archive/v0.23.240.tar.gz"
+    SHA1 "ca19f3769e6c80cfdd19d8b12ba5102c27b074e0"
+)
+
 project(lager VERSION 0.0.0)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -26,6 +32,22 @@ else()
   message(STATUS "Could not find ccache")
 endif()
 
+# In file included from /source/hunter/examples/Lager/boo.cpp:15:
+# In file included from /source/hunter/_testing/Hunter/_Base/d995bb2/0fca6e7/4334f7c/Install/include/lager/store.hpp:15:
+# In file included from /source/hunter/_testing/Hunter/_Base/d995bb2/0fca6e7/4334f7c/Install/include/lager/context.hpp:15:
+# /source/hunter/_testing/Hunter/_Base/d995bb2/0fca6e7/4334f7c/Install/include/lager/deps.hpp:15:10: fatal error: 'boost/hana/at_key.hpp' file not found
+# #include <boost/hana/at_key.hpp>
+hunter_add_package(Boost)
+find_package(Boost CONFIG REQUIRED)
+
+# In file included from /source/hunter/examples/Lager/boo.cpp:15:
+# In file included from /source/hunter/_testing/Hunter/_Base/6c09100/0fca6e7/4334f7c/Install/include/lager/store.hpp:15:
+# In file included from /source/hunter/_testing/Hunter/_Base/6c09100/0fca6e7/4334f7c/Install/include/lager/context.hpp:16:
+# /source/hunter/_testing/Hunter/_Base/6c09100/0fca6e7/4334f7c/Install/include/lager/util.hpp:17:10: fatal error: 'zug/util.hpp' file not found
+# #include <zug/util.hpp>
+hunter_add_package(Zug)
+find_package(Zug CONFIG REQUIRED)
+
 #  Targets
 #  =======
 
@@ -35,6 +57,7 @@ target_include_directories(lager INTERFACE
   $<BUILD_INTERFACE:${lager_BINARY_DIR}/>
   $<BUILD_INTERFACE:${lager_SOURCE_DIR}/>
   $<INSTALL_INTERFACE:include>)
+target_link_libraries(lager INTERFACE zug Boost::boost)
 
 install(TARGETS lager EXPORT LagerConfig)
 
