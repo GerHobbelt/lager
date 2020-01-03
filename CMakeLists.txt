@@ -11,8 +11,7 @@ HunterGate(
 
 project(lager VERSION 0.0.0)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+string(APPEND CMAKE_CXX_FLAGS " -Wall")
 set(CMAKE_EXPORT_COMPILE_COMMANDS on)
 set(CMAKE_CXX_EXTENSIONS off)
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
@@ -32,20 +31,10 @@ else()
   message(STATUS "Could not find ccache")
 endif()
 
-# In file included from /source/hunter/examples/Lager/boo.cpp:15:
-# In file included from /source/hunter/_testing/Hunter/_Base/d995bb2/0fca6e7/4334f7c/Install/include/lager/store.hpp:15:
-# In file included from /source/hunter/_testing/Hunter/_Base/d995bb2/0fca6e7/4334f7c/Install/include/lager/context.hpp:15:
-# /source/hunter/_testing/Hunter/_Base/d995bb2/0fca6e7/4334f7c/Install/include/lager/deps.hpp:15:10: fatal error: 'boost/hana/at_key.hpp' file not found
-# #include <boost/hana/at_key.hpp>
 hunter_add_package(Boost)
-find_package(Boost CONFIG REQUIRED)
-
-# In file included from /source/hunter/examples/Lager/boo.cpp:15:
-# In file included from /source/hunter/_testing/Hunter/_Base/6c09100/0fca6e7/4334f7c/Install/include/lager/store.hpp:15:
-# In file included from /source/hunter/_testing/Hunter/_Base/6c09100/0fca6e7/4334f7c/Install/include/lager/context.hpp:16:
-# /source/hunter/_testing/Hunter/_Base/6c09100/0fca6e7/4334f7c/Install/include/lager/util.hpp:17:10: fatal error: 'zug/util.hpp' file not found
-# #include <zug/util.hpp>
 hunter_add_package(Zug)
+
+find_package(Boost CONFIG REQUIRED)
 find_package(Zug CONFIG REQUIRED)
 
 #  Targets
